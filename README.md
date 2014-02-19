@@ -6,6 +6,7 @@ An extension to KendoUI's MultiSelect to allow toggling of values and a less tec
 
 Example Use:
 
+<pre>
 <style>
     .k-list-container .k-item {
         cursor: pointer;
@@ -24,13 +25,16 @@ Example Use:
         background-position: -99px -99px;
     }
 </style>
+</pre>
 
-<input id="txtDemo" data-placeholder="Please Select... " value="1,2,3,4" />
+<pre>
+&lt;input id="txtDemo" data-placeholder="Please Select... " value="1,2,3,4" />
+</pre>
 
-<script src="./kendo.multiSelectCheckBox.js"></script>
-<script>
+<pre>
+&lt;script src="./kendo.multiSelectCheckBox.js">&lt;/script>
+&lt;script>
     $(function () {
-        
         $("#txtDemo").kendoMultiSelectCheckBox({
             dataTextField: 'id',
             dataValueField: 'name',
@@ -42,4 +46,5 @@ Example Use:
             value: $("#txtDemo").val().split(",")
         });
     });
-</script>
+&lt;/script>
+</pre>
