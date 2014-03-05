@@ -19,6 +19,41 @@
         scrollTop: 0,
         init: function (element, options) {
             var that = this;
+            options = that._parseOptions(options);
+
+            // init the multiSelect
+            MultiSelect.fn.init.call(that, element, options);
+
+            // get a handle the base itemTemplate function & overwrite it, forcing no hide
+            var fnItemTemplate = that.itemTemplate;
+            that.itemTemplate = function (data, idx, hide) {
+                return fnItemTemplate.call(that, data, idx, false);
+            };
+
+            // add  default change event to save scroll position
+            that.bind("change", function (e) {
+                // preserve scroll position
+                $(e.sender.ul).scrollTop(e.sender.scrollTop);
+            });
+            // add  default change event to save scroll position
+            that.bind("dataBound", function (e) {
+                // precheck all the elements in the value array
+                var ms = e.sender,
+                    arrVal = ms.value(),
+                    arrData = ms.dataSource.view(),
+                    arrLi = ms.ul.children();
+
+                // loop through each item in our data list and figure out
+                if (arrVal.length > 0) {
+                    $(arrData).each(function (i, oData) {
+                        if ($.inArray(oData[options.dataValueField], arrVal)) {
+                            $(arrLi[i]).removeClass('k-i-blank').addClass('k-i-tick');
+                        }
+                    });
+                }
+            });
+        },
+        _parseOptions: function (options) {
             options = options || {};
             options.dataTextField = options.dataTextField || "text";
             options.dataValueField = options.dataValueField || "value";
@@ -26,32 +61,14 @@
             // preserve the item template if passed, else create our own
             var oTemplate = (options && options.itemTemplate) ? kendo.template('<span class="k-icon k-i-blank"></span> ' + options.itemTemplate) : kendo.template('<span class="k-icon k-i-blank"></span> #:' + kendo.expr(options.dataTextField, 'data') + '#', { useWithBlock: false });
 
-            var oOptions = $.extend({
-                    autoClose: false,
-                    highlightFirst: false,
-                    filter: 'contains'
-                },
-                options,
-                { itemTemplate: oTemplate }
-            );
-
-            // init the multiSelect
-            MultiSelect.fn.init.call(that, element, oOptions);
-            
-            // get a handle the base itemTemplate function & overwrite it, forcing no hide
-            var fnItemTemplate = that.itemTemplate;
-            that.itemTemplate = function (data, idx, hide) {
-                return fnItemTemplate.call(that, data, idx, false);
-            };
-            
-            // add  default change event to save scroll position
-            that.bind("change", function (e) {
-                // preserve scroll position
-                $(e.sender.ul).scrollTop(e.sender.scrollTop);
-            });
+            // use the computed options object
+            return $.extend({}, options, { itemTemplate: oTemplate });
         },
         options: {
             name: 'MultiSelectCheckBox',
+            autoClose: false,
+            highlightFirst: false,
+            filter: 'contains'
         },
         _select: function (li) {
             var that = this,
@@ -103,5 +120,8 @@
         }
     });
 
+    // register the plugin
     ui.plugin(MultiSelectCheckBox);
+    // workaround for MVVM not wiring up
+    kendo.data.binders.widget.multiselectcheckbox = kendo.data.binders.widget.multiselect;
 })(jQuery);
