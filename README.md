@@ -7,16 +7,17 @@ An extension to KendoUI's MultiSelect to allow toggling of values and a less tec
 Example Use:
 
 <pre>
-<style>
+&lt;style>
     .k-list-container .k-item {
         cursor: pointer;
     }
 
     .k-list-container .k-item .k-icon {
-        border-top: 1px solid #888;
-        border-left: 1px solid #888;
-        border-bottom: 1px solid #444;
-        border-right: 1px solid #444;
+        background-color: #FFFFFF;
+        border-color: #AAA #444 #444 #AAA;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 5px;
         margin-right: 4px;
         width: 15px;
         height: 15px;
@@ -24,7 +25,7 @@ Example Use:
     .k-i-blank {
         background-position: -99px -99px;
     }
-</style>
+&lt;/style>
 </pre>
 
 <pre>
