@@ -1,19 +1,23 @@
 ﻿/*
     Author:         James Carpenter
-    Date:           02/19/2014
+    Last Updated:   03/04/2014
     Description:    Extension to KendoUI's MultiSelect functionality to make it easier for less tech savvy people to use
     Usage:
                     $("#input").kendoMultiSelectCheckBox({OPTIONS});
 */
 
 (function ($) {
+    var oConst = {
+        blank: 'k-i-blank',
+        checked: 'k-i-tick'
+    };
     var ui = kendo.ui,
         MultiSelect = ui.MultiSelect;
 
-    var fnRender = MultiSelect.fn._render;
-    var fnSelect = MultiSelect.fn._select;
-    var fnSelected = MultiSelect.fn._selected;
-    var fnNull = function () { return null; };
+    var fnRender = MultiSelect.fn._render
+        , fnSelect = MultiSelect.fn._select
+        , fnSelected = MultiSelect.fn._selected
+        , fnNull = function () { return null; };
 
     var MultiSelectCheckBox = MultiSelect.extend({
         scrollTop: 0,
@@ -59,7 +63,7 @@
             options.dataValueField = options.dataValueField || "value";
 
             // preserve the item template if passed, else create our own
-            var oTemplate = (options && options.itemTemplate) ? kendo.template('<span class="k-icon k-i-blank"></span> ' + options.itemTemplate) : kendo.template('<span class="k-icon k-i-blank"></span> #:' + kendo.expr(options.dataTextField, 'data') + '#', { useWithBlock: false });
+            var oTemplate = (options && options.itemTemplate) ? kendo.template('<span class="k-icon ' + oConst.blank + '"></span> ' + options.itemTemplate) : kendo.template('<span class="k-icon ' + oConst.blank + '"></span> #:' + kendo.expr(options.dataTextField, 'data') + '#', { useWithBlock: false });
 
             // use the computed options object
             return $.extend({}, options, { itemTemplate: oTemplate });
@@ -83,7 +87,8 @@
             iValIndex = $.inArray(dataItem[that.options.dataValueField], values);
 
             // handle the visual fake checkbox
-            oCb.toggleClass('k-i-blank').toggleClass('k-i-tick');
+            oCb.toggleClass(oConst.blank).toggleClass(oConst.checked);
+
             // save a handle to scroll position
             that.scrollTop = $(that.ul).scrollTop();
 
